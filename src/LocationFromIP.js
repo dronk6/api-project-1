@@ -11,12 +11,15 @@ export class LocationFromIP extends LitElement {
     super();
     this.UserIpInstance = new UserIP();
     this.locationEndpoint = 'https://freegeoip.app/json/';
-    this.long = 10.305385;
-    this.lat = 77.923029;
+    this.long = null;
+    this.lat = null;
   }
 
   static get properties() {
-    return {};
+    return {
+      long: { type: String },
+      lat: { type: String },
+    };
   }
 
   firstUpdated(changedProperties) {
@@ -37,6 +40,8 @@ export class LocationFromIP extends LitElement {
         return false;
       })
       .then(data => {
+        this.lat = data.latitude;
+        this.long = data.longitude;
         console.log(data);
         return data;
       });
@@ -59,7 +64,7 @@ export class LocationFromIP extends LitElement {
   render() {
     // this function runs every time a properties() declared variable changes
     // this means you can make new variables and then bind them this way if you like
-    const url = `https://maps.google.com/maps?q=${this.long},${this.lat}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+    const url = `https://maps.google.com/maps?q=${this.lat},${this.long}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
     return html`<iframe title="Where you are" src="${url}"></iframe> `;
   }
 }
